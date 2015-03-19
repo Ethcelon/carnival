@@ -1,0 +1,72 @@
+<!-- extend base layout -->
+{% extends "base.html" %}
+{% import "bootstrap/fixes.html" as fixes %}
+
+{% block title %}CARNIVAL 2015{% endblock %}
+
+{% block content %}
+
+<div class="container">
+<div class="row">
+    {% if updates %}
+    <div class="col-md-12">
+        {{ pagination.info |safe }}
+    </div>
+    <hr>
+    <div class="col-md-12">
+    {{ pagination.links|safe }}    
+    </div>
+    <br>
+    <hr>
+    <table class="table table-hover table-bordered table-responsive">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Head</th>
+          <th>Body</th>
+          <th>Timestamp</th>
+          <th>Author</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for update in updates %}
+          <tr>
+            <td>{{ loop.index + (page-1) * per_page }}</td>
+            <td>{{ update['head'] }}</td>
+            <td>{{ update['body'] }}</td>
+            <td>{{ update['timestamp']}}</td>
+            <td>{{ update['author']}}
+            <td><button type="button" class="btn btn-default" aria-label="Left Align">
+                    <a href="/delete/{{update['id']}}?page={{page}}" rel="nofollow"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a>
+                </button>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {{ pagination.links|safe }}
+{% else %}
+<div class="row">
+    <div class="col-md-12">
+        <h1>There are no updates here</h1>
+        <h1>Click <a href="{{ url_for('post') }}">here</a> to post some updates!</h1>
+    </div>
+</div>
+{% endif %}
+
+</div>
+</div>
+{% endblock %}
+
+{% block head %}
+{{super()}}
+{{fixes.ie8()}}
+{% endblock %}
+
+{% block js%}
+$('#manage-url').addClass('active');
+{% endblock %}
+
+{% block username %}
+{{ username }}
+{% endblock %}
